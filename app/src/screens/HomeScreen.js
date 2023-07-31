@@ -1,14 +1,60 @@
 import React from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 
-const HomeScreen = () => {
-  return <Text style={styles.text}>HomeScreen</Text>;
+// destructured only navigation from props
+const HomeScreen = ({ navigation }) => {
+	const handleNavigation = (location) => {
+		// this is how we navigate to other screens, the string passed in is the name of the screen,
+		// already defined in App.js, similar to Routes in React
+		navigation.navigate(location);
+	};
+
+	return (
+		<View style={styles.view}>
+			<Text style={styles.textStyle}>Welcome! </Text>
+			<View style={styles.otherView}>
+				<TouchableOpacity
+					style={[styles.btnStyle, { backgroundColor: "dodgerblue" }]}
+					onPress={() => handleNavigation("List")}
+				>
+					<Text> Navigate List </Text>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={[styles.btnStyle, { backgroundColor: "orange" }]}
+					onPress={() => handleNavigation("Components")}
+				>
+					<Text> Navigate Comp </Text>
+				</TouchableOpacity>
+			</View>
+		</View>
+	);
 };
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 30,
-  },
+	textStyle: {
+		fontSize: 30,
+	},
+
+	view: {
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+
+	otherView: {
+		marginTop: 20,
+		flexDirection: "row",
+		justifyContent: "space-evenly",
+	},
+
+	btnStyle: {
+		width: 150,
+		height: 50,
+		justifyContent: "center",
+		alignItems: "center",
+		borderRadius: 5,
+		marginHorizontal: 5,
+	},
 });
 
 export default HomeScreen;
