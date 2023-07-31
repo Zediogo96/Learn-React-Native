@@ -14,71 +14,66 @@ import React from "react";
 import { Text, View, FlatList, StyleSheet } from "react-native";
 
 const ListScreen = () => {
-  const friends = [
-    { name: "John Doe", age: 20 },
-    { name: "Jane Doe", age: 21 },
-    { name: "John Smith", age: 22 },
-    { name: "Jane Smith", age: 23 },
-    { name: "José Diogo", age: 26 },
-    { name: "Diana Meireles", age: 25 },
-  ];
+	const friends = [
+		{ name: "John Doe", age: 20 },
+		{ name: "Jane Doe", age: 21 },
+		{ name: "John Smith", age: 22 },
+		{ name: "Jane Smith", age: 23 },
+		{ name: "José Diogo", age: 26 },
+		{ name: "Diana Meireles", age: 25 },
+	];
 
-  return (
-    <FlatList
-      // Note: 'horizontal' and 'showsHorizontalScrollIndicator' are optional props that you can use if needed
-      // horizontal // same as horizontal={true}
-      // showsHorizontalScrollIndicator={false} // hide the horizontal scroll bar
-      
-      // hides the vertical scroll bar
-      showsVerticalScrollIndicator={false}
+	return (
+		<FlatList
+			// Note: 'horizontal' and 'showsHorizontalScrollIndicator' are optional props that you can use if needed
+			// horizontal // same as horizontal={true}
+			// showsHorizontalScrollIndicator={false} // hide the horizontal scroll bar
 
-      // Apply custom styles to the FlatList component
-      style={styles.listStyle}
-      
-      // keyExtractor is a function that returns a string that will be used as the key for each item in the list
-      keyExtractor={(friend) => friend.name}
-      
-      // Data to be rendered in the FlatList
-      data={friends}
-
-      // Render each item in the FlatList
-      renderItem={({ item }) => {
-        // Destructure the 'item' object directly to access its properties directly
-        const { name, age } = item;
-        return (
-          // Note: We use JSX comments here for better readability within the JSX code
-          <>
-            {/* Each friend's name and age */}
-            <Text style={styles.textStyle}>
-              {name} - Age {age}
-            </Text>
-            {/* Add any other elements you want to render for each item */}
-            {/* For example, you can add a separator between items */}
-            <View style={styles.separator} />
-          </>
-        );
-      }}
-    />
-  );
+			// hides the vertical scroll bar
+			showsVerticalScrollIndicator={false}
+			// Apply custom styles to the FlatList component
+			style={styles.listStyle}
+			// keyExtractor is a function that returns a string that will be used as the key for each item in the list
+			keyExtractor={(friend) => friend.name}
+			// Data to be rendered in the FlatList
+			data={friends}
+			// Render each item in the FlatList
+			renderItem={({ item }) => {
+				// Destructure the 'item' object directly to access its properties directly
+				const { name, age } = item;
+				return (
+					// Note: We use JSX comments here for better readability within the JSX code
+					<>
+						{/* Each friend's name and age */}
+						<Text style={styles.textStyle}>
+							{name} - Age {age}
+						</Text>
+						{/* Add any other elements you want to render for each item */}
+						{/* For example, you can add a separator between items */}
+						<View style={styles.separator} />
+					</>
+				);
+			}}
+		/>
+	);
 };
 
 const styles = StyleSheet.create({
-  listStyle: {
-    // Add any custom styles for the FlatList component here
-  },
-  textStyle: {
-    fontSize: 18,
-    // Add any custom styles for the text here
-  },
-  separator: {
-    height: 1,
-    backgroundColor: "gray",
-    // Add any custom styles for the separator here
-  },
+	listStyle: {
+		// Add any custom styles for the FlatList component here
+	},
+	textStyle: {
+		fontSize: 18,
+		// Add any custom styles for the text here
+	},
+	separator: {
+		height: 1,
+		backgroundColor: "gray",
+		// Add any custom styles for the separator here
+	},
 });
 
 export default ListScreen;
-
 ```
 
 # Section 4: Navigating Users Between Screens

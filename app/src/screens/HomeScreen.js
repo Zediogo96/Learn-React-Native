@@ -21,9 +21,9 @@ const HomeScreen = ({ navigation }) => {
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={[styles.btnStyle, { backgroundColor: "orange" }]}
-					onPress={() => handleNavigation("Components")}
+					onPress={() => handleNavigation("ImageScreen")}
 				>
-					<Text> Navigate Comp </Text>
+					<Text> Navigate Images </Text>
 				</TouchableOpacity>
 			</View>
 		</View>
