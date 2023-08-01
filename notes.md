@@ -301,11 +301,20 @@ const reducer = (state, action) => {
 		case "change_red":
 			// don't modify state directly (e.g. state.red = state.red - 15)
 			// instead: return a completely new object, with the updated state
-			return { ...state, red: Math.max(0, Math.min(255, state.red + action.payload)) };
+			return {
+				...state,
+				red: Math.max(0, Math.min(255, state.red + action.payload)),
+			};
 		case "change_green":
-			return { ...state, green: Math.max(0, Math.min(255, state.green + action.payload)) };
+			return {
+				...state,
+				green: Math.max(0, Math.min(255, state.green + action.payload)),
+			};
 		case "change_blue":
-			return { ...state, blue: Math.max(0, Math.min(255, state.blue + action.payload)) };
+			return {
+				...state,
+				blue: Math.max(0, Math.min(255, state.blue + action.payload)),
+			};
 		default:
 			return state;
 	}
@@ -325,20 +334,32 @@ const SquareScreen = () => {
 		<View>
 			<ColorCounter
 				title="Red"
-				onIncrease={() => dispatch({ type: "change_red", payload: COLOR_INCREMENT })}
-				onDecrease={() => dispatch({ type: "change_red", payload: -1 * COLOR_INCREMENT })}
+				onIncrease={() =>
+					dispatch({ type: "change_red", payload: COLOR_INCREMENT })
+				}
+				onDecrease={() =>
+					dispatch({ type: "change_red", payload: -1 * COLOR_INCREMENT })
+				}
 				colorValue={red}
 			/>
 			<ColorCounter
 				title="Green"
-				onIncrease={() => dispatch({ type: "change_green", payload: COLOR_INCREMENT })}
-				onDecrease={() => dispatch({ type: "change_green", payload: -1 * COLOR_INCREMENT })}
+				onIncrease={() =>
+					dispatch({ type: "change_green", payload: COLOR_INCREMENT })
+				}
+				onDecrease={() =>
+					dispatch({ type: "change_green", payload: -1 * COLOR_INCREMENT })
+				}
 				colorValue={green}
 			/>
 			<ColorCounter
 				title="Blue"
-				onIncrease={() => dispatch({ type: "change_blue", payload: COLOR_INCREMENT })}
-				onDecrease={() => dispatch({ type: "change_blue", payload: -1 * COLOR_INCREMENT })}
+				onIncrease={() =>
+					dispatch({ type: "change_blue", payload: COLOR_INCREMENT })
+				}
+				onDecrease={() =>
+					dispatch({ type: "change_blue", payload: -1 * COLOR_INCREMENT })
+				}
 				colorValue={blue}
 			/>
 
@@ -352,6 +373,30 @@ const SquareScreen = () => {
 					borderRadius: 20,
 				}}
 			/>
+		</View>
+	);
+};
+```
+
+# TextInput Element
+
+- iOS auto capitalizes the first letter of the first word in a sentence
+- By default, the TextInput element does not have any styling neither in iOS nor in Android
+
+## Important Props
+
+- autoCapitalize = "none" (iOS only) => e.g. sentences should start with a capital letter
+- autoCorrect = { false } => e.g email addresses should not be auto corrected
+
+```js
+const TextScreen = () => {
+
+    const [name, setName] = useState('');
+
+	return (
+		<View>
+			<TextInput style={styles.textInput} onChange={(e) => setName(e.)} />
+            <Text>My name is {name}</Text>
 		</View>
 	);
 };
