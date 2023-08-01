@@ -387,17 +387,80 @@ const SquareScreen = () => {
 
 - autoCapitalize = "none" (iOS only) => e.g. sentences should start with a capital letter
 - autoCorrect = { false } => e.g email addresses should not be auto corrected
+- secureTextEntry = { true } => e.g. passwords should be hidden
+- onChangeText = { (newValue) => doSomething(newValue) } => e.g. update the state variable with the new value
 
 ```js
 const TextScreen = () => {
-
-    const [name, setName] = useState('');
-
-	return (
-		<View>
-			<TextInput style={styles.textInput} onChange={(e) => setName(e.)} />
-            <Text>My name is {name}</Text>
-		</View>
-	);
+	<TextInput
+		style={styles.textInput}
+		autoCapitalize="none"
+		autoCorrect={false}
+		value={password}
+		onChangeText={(newValue) => setPassword(newValue)}
+		secureTextEntry={true}
+	/>;
 };
 ```
+
+# Section 7: How to Handle Screen Layout
+
+## Layout Systems
+
+- **Box Object Model (BOM):**
+  - the **height / width** of an element + the space around it (**padding**, **margin**, **border**)
+  - use this to affect the positioning of a single element
+- **Flex Box:**
+  - How some number of sibling elements get laid out **inside a parent**
+  - Use this to position multiple elements with a **common parent**
+- **Position:**
+  - How an element is positioned relative to its parent
+  - Use this to override the default behavior of **BOM** + **Flex Box**
+
+## Box Object Model (BOM)
+
+![picture 2](images/26c8ced3c53330707ea9d18c91a4eaa93aac6b67c4d11e7debae5518baef39de.png)
+
+## Flex Box
+
+### flexDirection
+
+- **row** - horizontal
+- **column** - vertical (**by default**)
+- affects the direction of the main axis:
+  - **row** => main axis is horizontal (meaning justifyContent affects the horizontal axis and alignItems affects the vertical axis)
+  - **column** => main axis is vertical (meaning justifyContent affects the vertical axis and alignItems affects the horizontal axis)
+
+### alignItems
+
+- flex-start
+- flex-end
+- center
+- stretch (**by default**)
+
+### justifyContent
+
+- flex-start (**by default**)
+- flex-end
+- center
+- space-between (focus on the space between elements)
+- space-around (focus on the space around elements)
+
+### alignSelf
+
+- overrides the alignItems property received from the parent for a single element
+
+## Position
+
+- relative (default)
+- absolute (powerful when combined with top, bottom, left, right)
+
+## Absolute Fill Object (trick)
+
+- absoluteFillObject is a helper object that can be used to fill up the entire parent element
+- set position: "absolute" and top: 0, bottom: 0, left: 0, right: 0
+- or in a single line: ...StyleSheet.absoluteFillObject
+
+![picture 3](images/62fa064315cb5479fb86f930143e79441bd2e13222a6ca305c9335f3162e183c.png)  
+
+

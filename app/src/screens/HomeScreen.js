@@ -41,6 +41,13 @@ const HomeScreen = ({ navigation }) => {
 				>
 					<Text> Navigate Text </Text>
 				</TouchableOpacity>
+
+				<TouchableOpacity
+					style={[styles.btnStyle, { backgroundColor: "white", borderColor: "black", borderWidth: 1 }]}
+					onPress={() => handleNavigation("BoxScreen")}
+				>
+					<Text> Navigate Text </Text>
+				</TouchableOpacity>
 			</View>
 		</View>
 	);
