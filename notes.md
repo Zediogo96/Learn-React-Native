@@ -172,3 +172,136 @@ const styles = StyleSheet.create({
 	},
 });
 ```
+
+# Section 6: State Management in React Components
+
+- props -> system to pass data from a parent component to a child component
+- state -> system to track a piece of data that will change over time, if that data changes, our app will re-render
+
+## Notes
+
+- **Never** directly modify a state variable. React won't detect the change and won't re-render the component, use the setter function instead
+- When a component is re-rendered, **all it's children are also re-rendered**
+- A state variable can be passed to a child component! At that point, the state variable is now being used as props.
+
+## Great use case for useState
+
+- Instead of using multiple state variables, we can use a single state variable that is an object and has multiple properties
+
+```javascript
+const COLOR_INCREMENT = 15;
+
+const SquareScreen = () => {
+	const [colors, setColors] = useState({ red: 128, green: 128, blue: 255 });
+
+	const { red, green, blue } = colors;
+
+	const updateColor = (color, isIncrement) => {
+		const step = isIncrement ? COLOR_INCREMENT : -1 * COLOR_INCREMENT;
+
+		setColors({
+			...colors,
+			[color]: Math.min(Math.max(colors[color] + step, 0), 255),
+		});
+	};
+
+	return (
+		<View>
+			<ColorCounter
+				title="Red"
+				onIncrease={() => updateColor("red", true)}
+				onDecrease={() => updateColor("red", false)}
+				colorValue={red}
+			/>
+			<ColorCounter
+				title="Green"
+				onIncrease={() => updateColor("green", true)}
+				onDecrease={() => updateColor("green", false)}
+				colorValue={green}
+			/>
+			<ColorCounter
+				title="Blue"
+				onIncrease={() => updateColor("blue", true)}
+				onDecrease={() => updateColor("blue", false)}
+				colorValue={blue}
+			/>
+
+			<View
+				style={{
+					width: Dimensions.get("window").width * 0.8,
+					height: Dimensions.get("window").height * 0.3,
+					marginHorizontal: Dimensions.get("window").width * 0.1,
+					marginVertical: Dimensions.get("window").height * 0.05,
+					backgroundColor: `rgb(${colors.red}, ${colors.green}, ${colors.blue})`,
+					borderRadius: 20,
+				}}
+			/>
+		</View>
+	);
+};
+```
+
+```js
+const ColorCounter = (props) => {
+	const { title, onIncrease, onDecrease, colorValue } = props;
+
+	return (
+		<View style={styles.container}>
+			<View style={styles.titleContainer}>
+				<Text style={{ fontSize: 45 }}>{title}</Text>
+			</View>
+
+			<TouchableOpacity
+				style={[
+					styles.btnStyle,
+					{ backgroundColor: "orange", opacity: colorValue === 0 ? 0.5 : 1 },
+				]}
+				onPress={onDecrease}
+				disabled={colorValue === 0}
+			>
+				<Text style={styles.btnText}> - </Text>
+			</TouchableOpacity>
+
+			<Text style={[styles.colorValue, { width: 60 }]}> {colorValue}</Text>
+
+			<TouchableOpacity
+				style={[
+					styles.btnStyle,
+					{ backgroundColor: "green", opacity: colorValue === 255 ? 0.5 : 1 },
+				]}
+				onPress={onIncrease}
+			>
+				<Text style={styles.btnText}> + </Text>
+			</TouchableOpacity>
+		</View>
+	);
+};
+
+const styles = StyleSheet.create({
+	container: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginTop: 20,
+		marginHorizontal: 20,
+	},
+	titleContainer: {
+		width: 150, // Adjust the width as needed
+		marginRight: 20,
+	},
+	btnStyle: {
+		width: 50,
+		height: 50,
+		justifyContent: "center",
+		alignItems: "center",
+		borderRadius: 5,
+		marginHorizontal: 5,
+	},
+	btnText: {
+		fontSize: 30,
+	},
+	colorValue: {
+		maringHorizontal: 20,
+		fontSize: 30,
+	},
+});
+```
