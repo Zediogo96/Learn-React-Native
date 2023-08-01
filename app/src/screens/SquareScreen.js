@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import { View } from "react-native";
 import ColorCounter from "../components/ColorCounter";
 
@@ -6,55 +6,63 @@ import { Dimensions } from "react-native";
 
 const COLOR_INCREMENT = 15;
 
+const reducer = (state, action) => {
+	switch (action.type) {
+		case "change_red":
+			// don't modify state directly (e.g. state.red = state.red - 15)
+			// instead: return a completely new object, with the updated state
+			return { ...state, red: Math.max(0, Math.min(255, state.red + action.payload)) };
+		case "change_green":
+			return { ...state, green: Math.max(0, Math.min(255, state.green + action.payload)) };
+		case "change_blue":
+			return { ...state, blue: Math.max(0, Math.min(255, state.blue + action.payload)) };
+		default:
+			return state;
+	}
+};
+
 const SquareScreen = () => {
-	const [colors, setColors] = useState({ red: 128, green: 128, blue: 255 });
+	// initial state === { red: 0, green: 0, blue: 0 }
+	// dispatch === runMyReducer
+	const [state, dispatch] = useReducer(reducer, { red: 0, green: 0, blue: 0 });
 
-	const { red, green, blue } = colors;
+	// destructure state
+	const { red, green, blue } = state;
 
-	const updateColor = (color, isIncrement) => {
-		const step = isIncrement ? COLOR_INCREMENT : -1 * COLOR_INCREMENT;
-
-		setColors({
-			...colors,
-			[color]: Math.min(Math.max(colors[color] + step, 0), 255),
-		});
-	};
+	const windowDim = Dimensions.get("window");
 
 	return (
 		<View>
 			<ColorCounter
 				title="Red"
-				onIncrease={() => updateColor("red", true)}
-				onDecrease={() => updateColor("red", false)}
+				onIncrease={() => dispatch({ type: "change_red", payload: COLOR_INCREMENT })}
+				onDecrease={() => dispatch({ type: "change_red", payload: -1 * COLOR_INCREMENT })}
 				colorValue={red}
 			/>
 			<ColorCounter
 				title="Green"
-				onIncrease={() => updateColor("green", true)}
-				onDecrease={() => updateColor("green", false)}
+				onIncrease={() => dispatch({ type: "change_green", payload: COLOR_INCREMENT })}
+				onDecrease={() => dispatch({ type: "change_green", payload: -1 * COLOR_INCREMENT })}
 				colorValue={green}
 			/>
 			<ColorCounter
 				title="Blue"
-				onIncrease={() => updateColor("blue", true)}
-				onDecrease={() => updateColor("blue", false)}
+				onIncrease={() => dispatch({ type: "change_blue", payload: COLOR_INCREMENT })}
+				onDecrease={() => dispatch({ type: "change_blue", payload: -1 * COLOR_INCREMENT })}
 				colorValue={blue}
 			/>
 
 			<View
 				style={{
-					width: Dimensions.get("window").width * 0.8,
-					height: Dimensions.get("window").height * 0.3,
-					marginHorizontal: Dimensions.get("window").width * 0.1,
-					marginVertical: Dimensions.get("window").height * 0.05,
-					backgroundColor: `rgb(${colors.red}, ${colors.green}, ${colors.blue})`,
+					width: windowDim.width * 0.8,
+					height: windowDim.height * 0.3,
+					marginHorizontal: windowDim.width * 0.1,
+					marginVertical: windowDim.height * 0.05,
+					backgroundColor: `rgb(${red}, ${green}, ${blue})`,
 					borderRadius: 20,
 				}}
 			/>
 		</View>
 	);
 };
-
-
-
 export default SquareScreen;

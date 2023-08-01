@@ -14,7 +14,7 @@ const HomeScreen = ({ navigation }) => {
           style={[styles.btnStyle, { backgroundColor: "dodgerblue" }]}
           onPress={() => handleNavigation("ColorScreen")}
         >
-          <Text> Navigate Counter </Text>
+          <Text> Navigate Colors </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.btnStyle, { backgroundColor: "orange" }]}
@@ -27,6 +27,12 @@ const HomeScreen = ({ navigation }) => {
           onPress={() => handleNavigation("SquareScreen")}
         >
           <Text> Navigate Square </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.btnStyle, { backgroundColor: "green" }]}
+          onPress={() => handleNavigation("CounterScreen")}
+        >
+          <Text> Navigate Counter </Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -276,32 +276,83 @@ const ColorCounter = (props) => {
 		</View>
 	);
 };
+```
 
-const styles = StyleSheet.create({
-	container: {
-		flexDirection: "row",
-		alignItems: "center",
-		marginTop: 20,
-		marginHorizontal: 20,
-	},
-	titleContainer: {
-		width: 150, // Adjust the width as needed
-		marginRight: 20,
-	},
-	btnStyle: {
-		width: 50,
-		height: 50,
-		justifyContent: "center",
-		alignItems: "center",
-		borderRadius: 5,
-		marginHorizontal: 5,
-	},
-	btnText: {
-		fontSize: 30,
-	},
-	colorValue: {
-		maringHorizontal: 20,
-		fontSize: 30,
-	},
-});
+## State Management with Reducer
+
+- Function that manages changes to an object
+- Called with two objects (arguments)
+  1. object that has all the state inside of it
+  2. object that describes the update we want to make to the state
+- 2 technicalities:
+  1. Never change Argument #1 directly
+  2. Always return a value to be used as Argument #1
+
+## Community Conventions
+
+- Use 'type' to describe the exact change operation we want to make (e.g. 'change_red' instead of 'red')
+- Use 'payload' to describe the exact amount that we want to change the state by (e.g. 'amount')
+
+### Example
+
+```js
+const reducer = (state, action) => {
+	switch (action.type) {
+		case "change_red":
+			// don't modify state directly (e.g. state.red = state.red - 15)
+			// instead: return a completely new object, with the updated state
+			return { ...state, red: Math.max(0, Math.min(255, state.red + action.payload)) };
+		case "change_green":
+			return { ...state, green: Math.max(0, Math.min(255, state.green + action.payload)) };
+		case "change_blue":
+			return { ...state, blue: Math.max(0, Math.min(255, state.blue + action.payload)) };
+		default:
+			return state;
+	}
+};
+
+const SquareScreen = () => {
+	// initial state === { red: 0, green: 0, blue: 0 }
+	// dispatch === runMyReducer
+	const [state, dispatch] = useReducer(reducer, { red: 0, green: 0, blue: 0 });
+
+	// destructure state
+	const { red, green, blue } = state;
+
+	const windowDim = Dimensions.get("window");
+
+	return (
+		<View>
+			<ColorCounter
+				title="Red"
+				onIncrease={() => dispatch({ type: "change_red", payload: COLOR_INCREMENT })}
+				onDecrease={() => dispatch({ type: "change_red", payload: -1 * COLOR_INCREMENT })}
+				colorValue={red}
+			/>
+			<ColorCounter
+				title="Green"
+				onIncrease={() => dispatch({ type: "change_green", payload: COLOR_INCREMENT })}
+				onDecrease={() => dispatch({ type: "change_green", payload: -1 * COLOR_INCREMENT })}
+				colorValue={green}
+			/>
+			<ColorCounter
+				title="Blue"
+				onIncrease={() => dispatch({ type: "change_blue", payload: COLOR_INCREMENT })}
+				onDecrease={() => dispatch({ type: "change_blue", payload: -1 * COLOR_INCREMENT })}
+				colorValue={blue}
+			/>
+
+			<View
+				style={{
+					width: windowDim.width * 0.8,
+					height: windowDim.height * 0.3,
+					marginHorizontal: windowDim.width * 0.1,
+					marginVertical: windowDim.height * 0.05,
+					backgroundColor: `rgb(${red}, ${green}, ${blue})`,
+					borderRadius: 20,
+				}}
+			/>
+		</View>
+	);
+};
 ```

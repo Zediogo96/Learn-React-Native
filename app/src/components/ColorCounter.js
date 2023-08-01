@@ -21,7 +21,9 @@ const ColorCounter = (props) => {
 				<Text style={styles.btnText}> - </Text>
 			</TouchableOpacity>
 
-			<Text style={[styles.colorValue, { width: 60 }]}> {colorValue}</Text>
+			<View style={{ width: 80, alignItems: "center" }}>
+				<Text style={[styles.colorValue]}>{colorValue}</Text>
+			</View>
 
 			<TouchableOpacity
 				style={[
