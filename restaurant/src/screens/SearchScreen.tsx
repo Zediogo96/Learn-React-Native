@@ -1,42 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, ScrollView } from "react-native";
 
 import SearchBar from "@/components/SearchBar";
-import yelp from "@/api/yelp";
+import useBusinessSearch from "@/hooks/useBusinessSearch";
+import { Business } from "@/types/Business";
+import ResultList from "@/components/ResultList";
 
-const SearchScreen = () => {
-	const [search, setSearch] = useState("");
-	const [results, setResults] = useState([]);
-	const [errorMessage, setErrorMessage] = useState("");
+import { NavigationProp } from "react-navigation";
 
-	const searchApi = async (searchTerm = "pasta") => {
-		try {
-			const response = await yelp.get("/search", {
-				params: {
-					limit: 50,
-					term: searchTerm,
-					location: "porto",
-				},
-			});
-			setResults(response.data.businesses);
-		} catch (err) {
-			setErrorMessage("Something went wrong");
-		}
-	};
+const SearchScreen = ({ navigation }: any) => {
+	console.log("SearchScreen props: ", navigation);
+	const [search, setSearch] = useState<string>("");
+	const [searchApi, results, errorMessage]: [
+		(arg0: string) => void,
+		Business[],
+		string
+	] = useBusinessSearch();
 
 	// Call searchApi when component is first rendered
 	useEffect(() => {
-		searchApi();
+		searchApi(search);
 	}, []);
 
 	return (
-		<View style={styles.container}>
+		<>
 			<SearchBar
 				onTermSubmit={() => searchApi(search)}
 				searchState={search}
 				updateState={setSearch}
 			/>
-			<View style={{ marginHorizontal: 18, marginTop: 10 }}>
+			<ScrollView
+				showsVerticalScrollIndicator={false}
+				style={{ marginHorizontal: 15, marginTop: 10, borderRadius: 10 }}
+			>
 				{results.length > 0 && (
 					<Text>We have found {results.length} results: </Text>
 				)}
@@ -44,15 +40,35 @@ const SearchScreen = () => {
 				{errorMessage ? (
 					<Text style={styles.errorMessage}>{errorMessage}</Text>
 				) : (
-					<Text>{search}</Text>
+					<Text>{errorMessage}</Text>
 				)}
-			</View>
-		</View>
+				<ResultList
+					title="Cost Effective"
+					results={results}
+					price="€"
+					navigation={navigation}
+				/>
+				<ResultList
+					title="Bit Pricier"
+					results={results}
+					price="€€"
+					navigation={navigation}
+				/>
+				<ResultList
+					title="Big Spender"
+					results={results}
+					price="€€€"
+					navigation={navigation}
+				/>
+			</ScrollView>
+		</>
 	);
 };
 
 const styles = StyleSheet.create({
-	container: {},
+	container: {
+		backgroundColor: "rgba(128,0,0,0.005)",
+	},
 	errorMessage: { color: "red" },
 });
 

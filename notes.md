@@ -389,6 +389,7 @@ const SquareScreen = () => {
 - autoCorrect = { false } => e.g email addresses should not be auto corrected
 - secureTextEntry = { true } => e.g. passwords should be hidden
 - onChangeText = { (newValue) => doSomething(newValue) } => e.g. update the state variable with the new value
+- onEndEditing = { () => doSomething() } => e.g. function gets called when the user presses the 'Done' button on the keyboard
 
 ```js
 const TextScreen = () => {
@@ -461,6 +462,61 @@ const TextScreen = () => {
 - set position: "absolute" and top: 0, bottom: 0, left: 0, right: 0
 - or in a single line: ...StyleSheet.absoluteFillObject
 
-![picture 3](images/62fa064315cb5479fb86f930143e79441bd2e13222a6ca305c9335f3162e183c.png)  
+![picture 3](images/62fa064315cb5479fb86f930143e79441bd2e13222a6ca305c9335f3162e183c.png)
 
+# React Navigation
 
+npm install react-navigation --legacy-peer-deps
+
+## Dependencies
+
+1. npx expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view -- --legacy-peer-deps
+2. npm install react-navigation-stack @react-native-community/masked-view --legacy-peer-deps
+
+```ts
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+
+import SearchScreen from "./src/screens/SearchScreen";
+
+const navigator = createStackNavigator(
+	{
+		// Routes
+		Search: SearchScreen,
+	},
+	{
+		initialRouteName: "Search",
+		defaultNavigationOptions: {
+			title: "Business Search",
+		},
+	}
+);
+
+export default createAppContainer(navigator);
+```
+
+# Section 8: Making API Requests with React Native
+
+## Axios
+
+- npm install axios
+
+```ts
+import axios from "axios";
+import { YELP_API_KEY } from "@env";
+
+export default axios.create({
+	baseURL: "https://api.yelp.com/v3/businesses",
+	headers: {
+		Authorization: `Bearer ${YELP_API_KEY}`,
+	},
+});
+```
+
+# Section 9: Making Hooks Reusable
+
+## useEffect Hook
+
+- useState(() => {}) => runs the arrow function **every time** the component is rendered
+- useEffect(() => {}, **[]**) => runs the arrow function only when the component is **first rendered**
+- useEffect(() => {}, **[value]** ) => runs the arrow function only when the component is **first rendered** and **when the value changes**
