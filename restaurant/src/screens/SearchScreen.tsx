@@ -6,10 +6,7 @@ import useBusinessSearch from "@/hooks/useBusinessSearch";
 import { Business } from "@/types/Business";
 import ResultList from "@/components/ResultList";
 
-import { NavigationProp } from "react-navigation";
-
 const SearchScreen = ({ navigation }: any) => {
-	console.log("SearchScreen props: ", navigation);
 	const [search, setSearch] = useState<string>("");
 	const [searchApi, results, errorMessage]: [
 		(arg0: string) => void,
@@ -42,24 +39,9 @@ const SearchScreen = ({ navigation }: any) => {
 				) : (
 					<Text>{errorMessage}</Text>
 				)}
-				<ResultList
-					title="Cost Effective"
-					results={results}
-					price="€"
-					navigation={navigation}
-				/>
-				<ResultList
-					title="Bit Pricier"
-					results={results}
-					price="€€"
-					navigation={navigation}
-				/>
-				<ResultList
-					title="Big Spender"
-					results={results}
-					price="€€€"
-					navigation={navigation}
-				/>
+				<ResultList title="Cost Effective" results={results} price="€" />
+				<ResultList title="Bit Pricier" results={results} price="€€" />
+				<ResultList title="Big Spender" results={results} price="€€€" />
 			</ScrollView>
 		</>
 	);

@@ -15,6 +15,7 @@ export interface Business {
     phone: string;
     display_phone: string;
     distance: number;
+    photos: string[];
 }
 
 export interface Category {

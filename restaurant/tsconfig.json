@@ -11,7 +11,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "target": "ESNext",
-    "types": ["react-native"],
+    "typeRoots": ["./src/types"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

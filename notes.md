@@ -144,33 +144,46 @@ const HomeScreen = ({ navigation }) => {
 		</View>
 	);
 };
+```
 
-const styles = StyleSheet.create({
-	textStyle: {
-		fontSize: 30,
-	},
+## use o withNavigation from react-navigation
 
-	view: {
-		flex: 1,
-		alignItems: "center",
-		justifyContent: "center",
-	},
+Instead of passing the navigation prop down to the child component, we can use the withNavigation helper function from react-navigation
 
-	otherView: {
-		marginTop: 20,
-		flexDirection: "row",
-		justifyContent: "space-evenly",
-	},
+```js
+const ResultList: React.FC<ResultListProps> = ({
+	title,
+	results,
+	price,
+	navigation,
+}) => {
+	const filteredResultsByPrice: Business[] = results.filter((result) => {
+		return result.price === price;
+	});
 
-	btnStyle: {
-		width: 150,
-		height: 50,
-		justifyContent: "center",
-		alignItems: "center",
-		borderRadius: 5,
-		marginHorizontal: 5,
-	},
-});
+	return (
+		<View style={styles.container}>
+			<Text style={styles.title}>{title}</Text>
+			<FlatList
+				horizontal={true}
+				showsHorizontalScrollIndicator={false}
+				data={filteredResultsByPrice}
+				keyExtractor={(item) => item.id}
+				renderItem={({ item }) => (
+					<TouchableOpacity
+						onPress={() =>
+							navigation.navigate("RestaurantScreen", { id: item.id })
+						}
+					>
+						<RestaurantCard restaurant={item} />
+					</TouchableOpacity>
+				)}
+			/>
+		</View>
+	);
+};
+
+export default withNavigation(ResultList); // don't forget to export the component wrapped with withNavigation
 ```
 
 # Section 6: State Management in React Components
