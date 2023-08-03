@@ -49,6 +49,10 @@ const blogReducer = (state: Blog[], action: { type: string; payload?: any }) => 
 			];
 		case "deleteBlog":
 			return state.filter((blog) => blog.id !== action.payload);
+		case "editBlog":
+			return state.map((blog) => {
+				return blog.id === action.payload.id ? { ...blog, title: action.payload.title, content: action.payload.content } : blog;
+			});
 		default:
 			return state;
 	}
@@ -66,10 +70,17 @@ const deleteBlogPost = (dispatch : any) => {
 	};
 };
 
+const editBlogPost = (dispatch : any) => {
+	return (id : number, title : string, content : string) => {
+		dispatch({ type: "editBlog", payload: {id, title, content } });
+	};
+};
+
+
 // Call the custom context creator with the reducer, actions, and initial state
 // Destructure the Context and Provider from the result for later use
 export const { Context, Provider } = createDataContext(
 	blogReducer, // The reducer function to manage state updates
-	{ addBlogPost, deleteBlogPost }, // An object containing action functions (in this case, just one: addBlogPost)
+	{ addBlogPost, deleteBlogPost, editBlogPost }, // An object containing action functions (in this case, just one: addBlogPost)
 	blogsData // The initial state, which contains an array of blog data
 );
