@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import {
 	View,
 	Text,
@@ -15,8 +15,9 @@ import Blog from "@/types/Blog";
 import { Entypo } from "@expo/vector-icons";
 import { Dimensions } from "react-native";
 
-import { Platform } from "react-native";
+import { Platform, Keyboard } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import CreatePost from "../components/CreatePost";
 
 const windowDimensions = Dimensions.get("window");
 
@@ -26,6 +27,7 @@ interface IndexScreenProps {
 
 const IndexScreen: React.FC<IndexScreenProps> = ({ route }) => {
 	const navigation = useNavigation<any>();
+	const scrollRef = useRef<FlatList>(null);
 
 	const {
 		state,
@@ -34,21 +36,20 @@ const IndexScreen: React.FC<IndexScreenProps> = ({ route }) => {
 	}: { state: Blog[]; addBlogPost: Function; deleteBlogPost: Function } =
 		useContext(BlogContext);
 
+	const handleBlogPostAdded = () => {
+		scrollRef.current?.scrollToEnd({ animated: true });
+		Keyboard.dismiss();
+	};
+
 	return (
 		<SafeAreaView style={styles.container}>
-			<TouchableOpacity
-				style={styles.button}
-				onPress={() => {
-					addBlogPost();
-				}}
-			>
-				<Text style={{ fontSize: 20 }}>Add Post</Text>
-			</TouchableOpacity>
+			<CreatePost scroll_to_end={handleBlogPostAdded} />
 
 			<FlatList
+				ref={scrollRef}
 				showsVerticalScrollIndicator={false}
 				data={state}
-				keyExtractor={(item) => item.title}
+				keyExtractor={(item) => item.id.toString()}
 				renderItem={({ item }) => {
 					return (
 						<View style={styles.postContainer}>

@@ -1,6 +1,7 @@
 import createDataContext from "./createDataContext";
+import Blog from "@/types/Blog"
 
-const blogsData = [
+const blogsData : Blog[] = [
 	{
 		id: 1,
 		title: "Introduction to React Hooks",
@@ -33,7 +34,8 @@ const blogsData = [
 	},
 ];
 
-const blogReducer = (state, action) => {
+const blogReducer = (state: Blog[], action: { type: string; payload?: any }) => {
+	
 	switch (action.type) {
 		// When an "addBlog" action is dispatched, add a new blog post to the state
 		case "addBlog":
@@ -41,27 +43,25 @@ const blogReducer = (state, action) => {
 				...state,
 				{
 					id: Math.floor(Math.random() * 99999),
-					title: `Blog Post #${state.length + 1}`,
-					content: `Blog Post #${state.length + 1} content`,
+					title: action.payload.title,
+					content: action.payload.content,
 				},
 			];
 		case "deleteBlog":
 			return state.filter((blog) => blog.id !== action.payload);
-
 		default:
 			return state;
 	}
 };
 
-const addBlogPost = (dispatch) => {
-	return () => {
-		// When this action is called, it dispatches an "addBlog" action to the reducer
-		dispatch({ type: "addBlog" });
+const addBlogPost = (dispatch : any) => {
+	return (title : string, content : string) => {
+		dispatch({ type: "addBlog", payload: { title, content } });
 	};
 };
 
-const deleteBlogPost = (dispatch) => {
-	return (id) => {
+const deleteBlogPost = (dispatch : any) => {
+	return (id : number) => {
 		dispatch({ type: "deleteBlog", payload: id });
 	};
 };
