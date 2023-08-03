@@ -533,3 +533,138 @@ export default axios.create({
 - useState(() => {}) => runs the arrow function **every time** the component is rendered
 - useEffect(() => {}, **[]**) => runs the arrow function only when the component is **first rendered**
 - useEffect(() => {}, **[value]** ) => runs the arrow function only when the component is **first rendered** and **when the value changes**
+
+# Section 10: Advanced State Management
+
+## Create the Context (e.g inside src/context/BlogContext.js)
+
+- value is the data that we want to share with all the components that are inside the BlogProvider
+- {children} is a special prop that is passed to the BlogProvider component automatically by React, it represents all the components that are inside the BlogProvider, including children of children
+
+```js
+import React from "react";
+
+const BlogContext = React.createContext();
+
+export const BlogProvider = ({ children }) => {
+	return <BlogContext.Provider value={5}>{children}</BlogContext.Provider>;
+};
+
+export default BlogContext;
+```
+
+## Wrap the App with the Context Provider (e.g inside App.js)
+
+```js
+const navigator = createStackNavigator(
+	{
+		Home: IndexScreen,
+	},
+	{
+		initialRouteName: "Home",
+		defaultNavigationOptions: {
+			title: "Blogs",
+		},
+	}
+);
+
+const styles = StyleSheet.create({
+	container: {},
+});
+
+const App = createAppContainer(navigator);
+
+export default () => {
+	return (
+		<BlogProvider>
+			<App />
+		</BlogProvider>
+	);
+};
+```
+
+## Consume the Context (e.g inside src/screens/IndexScreen.js)
+
+```js
+const IndexScreen = () => {
+	const value = useContext(BlogContext);
+	console.log(value);
+	return <Text style={styles.text}>Index Screen</Text>;
+};
+```
+
+# Fancy way of creating a Context Provider (Similar to Redux)
+
+## Create a reusable Context Provider (since the code is similar for all the Context Providers)
+
+```js
+import React, { useReducer, createContext } from "react";
+
+// Export a Higher Order Function that sets up a custom context provider
+export default (reducer, actions, initialState) => {
+	const Context = createContext();
+
+	const Provider = ({ children }) => {
+		const [state, dispatch] = useReducer(reducer, initialState);
+
+		// Initialize an empty object to store the bound action functions
+		const boundActions = {};
+
+		// Loop through the actions object to create "bound" versions of the actions
+		for (let key in actions) {
+			// Each action function in the actions object receives the dispatch function as an argument
+
+			// A "bound" action function is created by invoking the original action function with the dispatch function
+			// The bound action function is a convenience wrapper around dispatch, making it easier to trigger specific actions
+			boundActions[key] = actions[key](dispatch);
+		}
+
+		return (
+			<Context.Provider value={{ state, ...boundActions }}>
+				{children}
+			</Context.Provider>
+		);
+	};
+
+	// Return an object with the custom context (Context) and the Provider component
+	return { Context, Provider };
+};
+```
+
+## Create a Context Provider
+
+```js
+import createDataContext from "./createDataContext";
+
+const blogsData = [
+	/* ... */
+];
+
+const blogReducer = (state, action) => {
+	switch (action.type) {
+		case "addBlog":
+			return [
+				...state,
+				{
+					id: state.length + 1,
+					title: `Blog Post #${state.length + 1}`,
+					content: `Blog Post #${state.length + 1} content`,
+				},
+			];
+		default:
+			return state;
+	}
+};
+
+const addBlogPost = (dispatch) => {
+	return () => {
+		dispatch({ type: "addBlog" });
+	};
+};
+
+export const { Context, Provider } = createDataContext(
+	blogReducer, // reducer
+	{ addBlogPost }, // actions
+	blogsData // initial state
+);
+```
