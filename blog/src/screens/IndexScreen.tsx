@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -7,10 +7,7 @@ import {
 	SafeAreaView,
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import {
-	Context as BlogContext,
-	Provider as BlogProvider,
-} from "../context/BlogContext";
+import { Context as BlogContext } from "../context/BlogContext";
 import Blog from "@/types/Blog";
 import { Entypo } from "@expo/vector-icons";
 import { Dimensions } from "react-native";
@@ -18,6 +15,7 @@ import { Dimensions } from "react-native";
 import { Platform, Keyboard } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import CreatePost from "../components/CreatePost";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 const windowDimensions = Dimensions.get("window");
 
@@ -31,9 +29,18 @@ const IndexScreen: React.FC<IndexScreenProps> = ({ route }) => {
 
 	const {
 		state,
+		getBlogPosts,
 		deleteBlogPost,
-	}: { state: Blog[]; addBlogPost: Function; deleteBlogPost: Function } =
+	}: { state: Blog[]; getBlogPosts: Function; deleteBlogPost: Function } =
 		useContext(BlogContext);
+
+	useEffect(() => {
+		getBlogPosts();
+
+		navigation.addListener("didFocus", () => {
+			getBlogPosts();
+		});
+	}, []);
 
 	const handleBlogPostAdded = () => {
 		scrollRef.current?.scrollToEnd({ animated: true });

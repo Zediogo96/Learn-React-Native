@@ -1,0 +1,69 @@
+{
+  "blogPosts": [
+    {
+      "title": "Getting Started with React v2",
+      "content": "React is a popular JavaScript library for building interactive UIs. In this post, I'll show you how to create a simple React application from scratch. v2",
+      "id": 1
+    },
+    {
+      "id": 2,
+      "title": "Creating a Fake JSON Server",
+      "content": "In this post, I'll show you how to set up a fake JSON server for testing and development purposes."
+    },
+    {
+      "id": 3,
+      "title": "Using React Hooks",
+      "content": "React hooks are a powerful way to manage state and side effects in your React applications. Let's explore how to use them effectively."
+    },
+    {
+      "id": 4,
+      "title": "Introduction to Machine Learning",
+      "content": "Machine learning is a fascinating field that enables computers to learn from data and make predictions. Let's dive into the basics of machine learning algorithms."
+    },
+    {
+      "id": 5,
+      "title": "The Benefits of Meditation",
+      "content": "Meditation has numerous benefits for both the mind and body. In this post, we'll explore the science-backed advantages of incorporating meditation into your daily routine."
+    },
+    {
+      "id": 6,
+      "title": "Getting Started with Python",
+      "content": "Python is a popular and versatile programming language. If you're new to Python, this post will guide you through the basics and help you get started."
+    },
+    {
+      "id": 7,
+      "title": "Exploring the Grand Canyon",
+      "content": "The Grand Canyon is one of the most breathtaking natural wonders in the world. Join me on this virtual journey as we explore its beauty and geological history."
+    },
+    {
+      "id": 8,
+      "title": "Delicious Vegan Recipes",
+      "content": "Being vegan doesn't mean sacrificing taste. In this post, I'll share some delicious and easy-to-make vegan recipes that will satisfy your taste buds."
+    },
+    {
+      "id": 9,
+      "title": "Tips for Remote Work Productivity",
+      "content": "Remote work offers flexibility, but it also comes with its challenges. Learn some valuable tips and strategies to stay productive and maintain work-life balance while working remotely."
+    },
+    {
+      "id": 10,
+      "title": "Photography 101",
+      "content": "Capture stunning photos by mastering the basics of photography. This post covers essential techniques and tips to help you take impressive shots."
+    },
+    {
+      "title": "123",
+      "content": "123",
+      "id": 11
+    },
+    {
+      "title": "2313432",
+      "content": "23",
+      "id": 12
+    },
+    {
+      "title": "123",
+      "content": "123",
+      "id": 13
+    }
+  ]
+}

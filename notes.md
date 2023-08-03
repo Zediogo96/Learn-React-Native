@@ -668,3 +668,38 @@ export const { Context, Provider } = createDataContext(
 	blogsData // initial state
 );
 ```
+
+# Setup a Fake JSON API Server with JSON Server
+
+- npm install -g json-server
+- use ngrok server
+
+## Setup json-server
+
+- npm init -y
+- create a db.json file
+- add some data to the db.json file, e.g:
+```json
+{
+    "blogPosts": []
+}
+```
+- add a script to the package.json file, e.g:
+```json
+{
+  "name": "jsonserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "db": "json-server -w db.json", // -w flag watches for changes to the db.json file
+    "tunnel": "ngrok http 3000" // ngrok http 3000 => expose port 3000 to the internet
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "json-server": "^0.17.3",
+    "ngrok": "^5.0.0-beta.2"
+  }
+}
+```

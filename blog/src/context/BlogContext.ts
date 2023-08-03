@@ -1,6 +1,9 @@
 import createDataContext from "./createDataContext";
 import Blog from "@/types/Blog"
 
+import jsonServer from "../api/jsonServer";
+import axios from "axios";
+
 const blogsData : Blog[] = [
 	{
 		id: 1,
@@ -37,6 +40,9 @@ const blogsData : Blog[] = [
 const blogReducer = (state: Blog[], action: { type: string; payload?: any }) => {
 	
 	switch (action.type) {
+
+		case "getBlogPosts":
+			return action.payload;
 		// When an "addBlog" action is dispatched, add a new blog post to the state
 		case "addBlog":
 			return [
@@ -58,21 +64,34 @@ const blogReducer = (state: Blog[], action: { type: string; payload?: any }) => 
 	}
 };
 
-const addBlogPost = (dispatch : any) => {
-	return (title : string, content : string) => {
-		dispatch({ type: "addBlog", payload: { title, content } });
+const getBlogPosts = (dispatch : any) => {
+	return async () => {
+		// response === [{}, {}, {}]
+		const response = await jsonServer.get("/blogposts");
+		dispatch({ type: "getBlogPosts", payload: response.data });
 	};
+};
+		
+
+const addBlogPost = (dispatch : any) => {
+	return async (title : string, content : string, callback : Function) => {
+		await jsonServer.post("/blogposts", { title, content });
+		dispatch({ type: "addBlog", payload: { title, content } });
+	}
 };
 
 const deleteBlogPost = (dispatch : any) => {
-	return (id : number) => {
+	return async (id : number) => {
+		await jsonServer.delete(`/blogposts/${id}`);
 		dispatch({ type: "deleteBlog", payload: id });
 	};
 };
 
 const editBlogPost = (dispatch : any) => {
-	return (id : number, title : string, content : string) => {
-		dispatch({ type: "editBlog", payload: {id, title, content } });
+	return async (id : number, title : string, content : string, callback : Function) => {
+		await jsonServer.put(`/blogposts/${id}`, { title, content });
+		dispatch({ type: "editBlog", payload: { id, title, content } });
+		if (callback) callback();
 	};
 };
 
@@ -81,6 +100,6 @@ const editBlogPost = (dispatch : any) => {
 // Destructure the Context and Provider from the result for later use
 export const { Context, Provider } = createDataContext(
 	blogReducer, // The reducer function to manage state updates
-	{ addBlogPost, deleteBlogPost, editBlogPost }, // An object containing action functions (in this case, just one: addBlogPost)
-	blogsData // The initial state, which contains an array of blog data
+	{ getBlogPosts, addBlogPost, deleteBlogPost, editBlogPost }, // An object containing action functions (in this case, just one: addBlogPost)
+	[] // The initial state, which contains an array of blog data
 );
