@@ -1,31 +1,41 @@
 import React from "react";
 
-import { StyleSheet, Text, View } from "react-native";
-
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
-
-import IndexScreen from "@/screens/IndexScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
 import { Provider as BlogProvider } from "@/context/BlogContext";
 
-const navigator = createStackNavigator(
+import IndexScreen from "@/screens/IndexScreen";
+import PostScreen from "@/screens/PostScreen";
+
+type AppStackParamList = {
+	Home: undefined;
+	PostDetails: { id: number };
+};
+
+const Stack = createStackNavigator<AppStackParamList>();
+
+const routes: Array<React.ComponentProps<typeof Stack.Screen>> = [
 	{
-		Home: IndexScreen,
+		name: "Home",
+		component: IndexScreen,
 	},
 	{
-		initialRouteName: "Home",
-		defaultNavigationOptions: {
-			title: "Blogs",
-		},
-	}
-);
+		name: "PostDetails",
+		component: PostScreen,
+	},
+];
 
-const styles = StyleSheet.create({
-	container: {},
-});
-
-const App = createAppContainer(navigator);
+const App = () => {
+	return (
+		<NavigationContainer>
+			<Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+				<Stack.Screen name="Home" component={IndexScreen} />
+				<Stack.Screen name="PostDetails" component={PostScreen} />
+			</Stack.Navigator>
+		</NavigationContainer>
+	);
+};
 
 export default () => {
 	return (

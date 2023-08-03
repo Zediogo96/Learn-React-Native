@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
 	View,
 	Text,
 	StyleSheet,
 	TouchableOpacity,
-	Pressable,
+	SafeAreaView,
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import {
@@ -14,11 +14,19 @@ import {
 import Blog from "@/types/Blog";
 import { Entypo } from "@expo/vector-icons";
 import { Dimensions } from "react-native";
-import PressableIcon from "../components/PressableIcon";
+
+import { Platform } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const windowDimensions = Dimensions.get("window");
 
-const IndexScreen = () => {
+interface IndexScreenProps {
+	route: any;
+}
+
+const IndexScreen: React.FC<IndexScreenProps> = ({ route }) => {
+	const navigation = useNavigation<any>();
+
 	const {
 		state,
 		addBlogPost,
@@ -27,7 +35,7 @@ const IndexScreen = () => {
 		useContext(BlogContext);
 
 	return (
-		<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
 			<TouchableOpacity
 				style={styles.button}
 				onPress={() => {
@@ -56,11 +64,19 @@ const IndexScreen = () => {
 								</TouchableOpacity>
 							</View>
 							<Text style={styles.content}>{item.content}</Text>
+
+							<TouchableOpacity
+								onPress={() => {
+									navigation.navigate("PostDetails", { id: item.id });
+								}}
+							>
+								<Text style={{ color: "blue" }}>Read More</Text>
+							</TouchableOpacity>
 						</View>
 					);
 				}}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 };
 
@@ -69,6 +85,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: "center",
 		justifyContent: "center",
+		marginTop: Platform.OS === "android" ? 40 : 0,
 	},
 
 	postContainer: {
