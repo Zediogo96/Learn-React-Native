@@ -40,11 +40,14 @@ const blogReducer = (state, action) => {
 			return [
 				...state,
 				{
-					id: state.length + 1,
+					id: Math.floor(Math.random() * 99999),
 					title: `Blog Post #${state.length + 1}`,
 					content: `Blog Post #${state.length + 1} content`,
 				},
 			];
+		case "deleteBlog":
+			return state.filter((blog) => blog.id !== action.payload);
+
 		default:
 			return state;
 	}
@@ -57,10 +60,16 @@ const addBlogPost = (dispatch) => {
 	};
 };
 
+const deleteBlogPost = (dispatch) => {
+	return (id) => {
+		dispatch({ type: "deleteBlog", payload: id });
+	};
+};
+
 // Call the custom context creator with the reducer, actions, and initial state
 // Destructure the Context and Provider from the result for later use
 export const { Context, Provider } = createDataContext(
 	blogReducer, // The reducer function to manage state updates
-	{ addBlogPost }, // An object containing action functions (in this case, just one: addBlogPost)
+	{ addBlogPost, deleteBlogPost }, // An object containing action functions (in this case, just one: addBlogPost)
 	blogsData // The initial state, which contains an array of blog data
 );

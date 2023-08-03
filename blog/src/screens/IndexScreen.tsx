@@ -19,9 +19,11 @@ import PressableIcon from "../components/PressableIcon";
 const windowDimensions = Dimensions.get("window");
 
 const IndexScreen = () => {
-	const [isIconPressed, setIsIconPressed] = useState(false);
-
-	const { state, addBlogPost }: { state: Blog[]; addBlogPost: Function } =
+	const {
+		state,
+		addBlogPost,
+		deleteBlogPost,
+	}: { state: Blog[]; addBlogPost: Function; deleteBlogPost: Function } =
 		useContext(BlogContext);
 
 	return (
@@ -44,16 +46,14 @@ const IndexScreen = () => {
 						<View style={styles.postContainer}>
 							<View style={{ flexDirection: "row" }}>
 								<Text style={styles.title}>{item.title}</Text>
-								<PressableIcon
-									style={{
-										marginLeft: 10,
-										marginTop: 13,
-									}}
-									iconName="trash"
-									_size={24}
-									colorPressed="dodgerblue"
-									defaultColor="black"
-								/>
+								<TouchableOpacity onPress={() => deleteBlogPost(item.id)}>
+									<Entypo
+										name="trash"
+										size={24}
+										color="black"
+										style={styles.icon}
+									/>
+								</TouchableOpacity>
 							</View>
 							<Text style={styles.content}>{item.content}</Text>
 						</View>
