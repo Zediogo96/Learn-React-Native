@@ -22,8 +22,8 @@ const requireAuth = (req: any, res: any, next: any) => {
         const { userID } = payload;
 
         const user  = await User.findById(userID);
-
-        req.user = user;
+        
+        req.user = user?.toJSON();
 
         next();
     });

@@ -25,7 +25,7 @@ router.post("/register", async (req, res) => {
         user.password = hashedPassword;
         const newUser = await user.save();
 
-        const token = jwt.sign({userID: newUser._id}, process.env.JWT_SECRET_KEY!);
+        const token = jwt.sign({userID: newUser._id}, process.env.JWT_SECRET_KEY!);      
 
         res.status(201).send({token, ...newUser.toJSON()});
     }
@@ -39,9 +39,7 @@ router.post("/login", async (req, res) => {
 
     // find the user
     const user = await User.findOne({ email });
-    
-    console.log(user)
-
+   
     if (!email || !password) {
         return res.status(422).send({ error: "Must provide email and password" });
     }

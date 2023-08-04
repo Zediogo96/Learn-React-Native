@@ -2,8 +2,10 @@ import mongoose, { ConnectOptions, mongo } from "mongoose";
 import dotenv from "dotenv";
 import express from "express";
 import { router as authRoutes } from "./routes/authRoutes";
+import { router as trackRoutes } from "./routes/trackRoutes";
 import bodyParser from "body-parser";
 import  requireAuth  from "./middleware/requireAuth";
+
 
 dotenv.config();
 
@@ -27,6 +29,7 @@ app.use(bodyParser.json());
 
 // ROUTES
 app.use("/auth", authRoutes);
+app.use("/tracks", requireAuth, trackRoutes);
 
 
 app.get("/", requireAuth, (req, res) => {
