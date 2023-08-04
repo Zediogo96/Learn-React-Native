@@ -1,6 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 
 import { User } from "../models/User";
 
@@ -18,11 +20,12 @@ router.post("/register", async (req, res) => {
     });
     
     try {
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        user.password = hashedPassword;
         const newUser = await user.save();
 
         const token = jwt.sign({userID: newUser._id}, process.env.JWT_SECRET_KEY!);
-
-        // add token 
 
         res.status(201).send({token, ...newUser.toJSON()});
     }
@@ -31,8 +34,29 @@ router.post("/register", async (req, res) => {
     }
 });
 
-router.post("/login", (req, res) => {
-	res.send("You made a POST request to /login");
-});
+router.post("/login", async (req, res) => {
+	const { email, password } = req.body;
+
+    // find the user
+    const user = await User.findOne({ email });
+    
+    console.log(user)
+
+    if (!email || !password) {
+        return res.status(422).send({ error: "Must provide email and password" });
+    }
+
+    try {
+        const match = await bcrypt.compare(password, user!.password);
+
+        if (!match) return res.status(422).send({ error: "Invalid password or email" });
+        else {
+            const token = jwt.sign({userID: user!._id}, process.env.JWT_SECRET_KEY!);
+            res.status(400).send({token, ...user!.toJSON()});
+        }
+    } catch (err : any) {
+        res.status(422).send({ error: err.message });
+    }
+    });
 
 export { router };
