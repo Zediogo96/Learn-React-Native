@@ -17,4 +17,21 @@ router.get("/", async (req, res) => {
 	}
 });
 
+router.post("/createTrack", async (req, res) => {
+	const { name, locations } = req.body;
+	if (!name || !locations) {
+		return res
+			.status(422)
+			.send({ error: "You must provide a name and atleast one location" });
+	}
+
+	try {
+		const track = new Track({ name, locations, userID: req.user._id });
+		await track.save();
+		res.status(200).send(track);
+	} catch (err) {
+		res.status(422).send({ error: err.message });
+	}
+});
+
 export { router };
