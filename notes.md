@@ -679,27 +679,160 @@ export const { Context, Provider } = createDataContext(
 - npm init -y
 - create a db.json file
 - add some data to the db.json file, e.g:
+
 ```json
 {
-    "blogPosts": []
+	"blogPosts": []
 }
 ```
+
 - add a script to the package.json file, e.g:
+
 ```json
 {
-  "name": "jsonserver",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "db": "json-server -w db.json", // -w flag watches for changes to the db.json file
-    "tunnel": "ngrok http 3000" // ngrok http 3000 => expose port 3000 to the internet
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "json-server": "^0.17.3",
-    "ngrok": "^5.0.0-beta.2"
-  }
+	"name": "jsonserver",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"db": "json-server -w db.json", // -w flag watches for changes to the db.json file
+		"tunnel": "ngrok http 3000" // ngrok http 3000 => expose port 3000 to the internet
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"json-server": "^0.17.3",
+		"ngrok": "^5.0.0-beta.2"
+	}
 }
+```
+
+---
+
+# React Redux
+
+## Setup of a Slice
+
+```js
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+// Define the interface for the initial state of the counter
+interface InitialState {
+	value: number; // 'value' represents the counter value
+}
+
+// Define a constant string to be used as the name of the slice (Redux state)
+const UpdateCounter: string = "UpdateCounter";
+
+const initialState: InitialState = {
+	value: 15,
+};
+
+// Create a Redux slice using the createSlice function from Redux Toolkit
+export const counterSlice = createSlice({
+	name: UpdateCounter, // The name of the slice
+	initialState: initialState, // The initial state for the counter
+	reducers: {
+		// Each reducer modifies the state based on the action dispatched
+		increment: (state) => {
+			state.value += 1;
+		},
+		decrement: (state) => {
+			state.value -= 1;
+		},
+		incrementByAmount: (state, action: PayloadAction<number>) => {
+			state.value += action.payload;
+		},
+		setCounter: (state, action: PayloadAction<number>) => {
+			state.value = action.payload;
+		},
+	},
+});
+
+// Extract the action creators from the created slice using object destructuring
+export const { increment, decrement, incrementByAmount, setCounter } =
+	counterSlice.actions;
+
+// You must export the reducer as follows for it to be able to be read by the store.
+export default counterSlice.reducer;
+```
+
+## Setup of the Store using the Slice
+
+```js
+import { configureStore } from "@reduxjs/toolkit";
+// This is how you import a reducer, based on the prior export.
+import counterReducer from "../slices/counterSlice";
+
+const store = configureStore({
+	reducer: {
+		// You are free to call the LHS what you like, but it must have a reducer on the RHS.
+		counter: counterReducer,
+	},
+});
+
+export default store;
+
+export type RootState = ReturnType<typeof store.getState>;
+```
+
+## Setup of the Provider
+
+```js
+import { Provider } from "react-redux";
+import store from "./src/redux/store/counterStore";
+
+const App = () => {
+	const AppContainer = createAppContainer(switchNavigator);
+
+	return (
+		<Provider store={store}>
+			<AppContainer />
+		</Provider>
+	);
+};
+
+export default App;
+```
+
+## How to use the Store in a Component
+
+```js
+// These are the hooks you need to import to use the store.
+import { useDispatch, useSelector } from "react-redux";
+
+// import the action creators from the slice
+import {
+	increment,
+	decrement,
+	incrementByAmount,
+	setCounter,
+} from "@/redux/slices/counterSlice";
+
+const Teste : React.FC<TesteProps> = () => {
+	const dispatch = useDispatch();
+	// must match the name of the slice in the store
+	const counter = useSelector((state: any) => state.counter_.value);
+
+	<Animated.Text
+		entering={FadeInRight}
+		style={{
+			fontSize: 35,
+			color: "rgb(251,91,9)",
+			fontFamily: "Pacifico-Regular",
+		}}
+	>
+		{counter}
+	</Animated.Text>
+
+	<View style={{flexDirection: "row"}}>
+		<TouchableOpacity
+		onPress={() => dispatch(increment())}
+		>
+		<TouchableOpacity
+		onPress={() => dispatch(decrement())}
+		>
+	</View>
+};
+
 ```

@@ -2,31 +2,36 @@ import React, { useState, useRef } from "react";
 import { Animated, Easing, TextInput, StyleSheet } from "react-native";
 
 interface FloatingTextInputProps {
-	label: string;
+	label?: string;
 	value: string;
-	titleActiveSize: number;
-	titleInActiveSize: number;
-	titleActiveColor: string;
-	titleInactiveColor: string;
+	titleActiveSize?: number;
+	titleInActiveSize?: number;
+	titleActiveColor?: string;
+	titleInactiveColor?: string;
 	width: number;
 	height: number;
-    style: object;
+	textStyle?: object;
+	inputStyle?: object;
+	style?: object;
+	hidden?: boolean;
+	handleTextChange?: (text: string) => void;
 }
 
-const FlaotingTextInput = ({ ...props }: FloatingTextInputProps) => {
-	const {
-		label,
-		value,
-		titleActiveSize,
-		titleInActiveSize,
-		titleActiveColor,
-		titleInactiveColor,
-		width,
-		height,
-        style,
-	} = props;
-
-	const [text, onChangeText] = React.useState("");
+const FloatingLabelInput: React.FC<FloatingTextInputProps> = ({
+	label = "Default Label",
+	value,
+	titleActiveSize = 11.5,
+	titleInActiveSize = 15,
+	titleActiveColor = "rgb(251,91,9)",
+	titleInactiveColor = "white",
+	width,
+	height,
+	textStyle = {},
+	inputStyle = {},
+	style = {},
+	hidden = false,
+	handleTextChange = () => {},
+}) => {
 	const animatedValue = useRef(new Animated.Value(0));
 
 	const returnAnimatedTitleStyles = {
@@ -41,6 +46,7 @@ const FlaotingTextInput = ({ ...props }: FloatingTextInputProps) => {
 		],
 		fontSize: animatedValue?.current?.interpolate({
 			inputRange: [0, 1],
+			// ERROR HERE
 			outputRange: [titleInActiveSize, titleActiveSize],
 			extrapolate: "clamp",
 		}),
@@ -56,8 +62,8 @@ const FlaotingTextInput = ({ ...props }: FloatingTextInputProps) => {
 			outputRange: [titleInactiveColor, titleActiveColor],
 		}),
 		borderBottomWidth: 0.8,
-        width: width,
-        height: height,
+		width: width,
+		height: height,
 	};
 	const onFocus = () => {
 		Animated.timing(animatedValue?.current, {
@@ -69,7 +75,7 @@ const FlaotingTextInput = ({ ...props }: FloatingTextInputProps) => {
 	};
 
 	const onBlur = () => {
-		if (!text) {
+		if (!value) {
 			Animated.timing(animatedValue?.current, {
 				toValue: 0,
 				duration: 500,
@@ -81,13 +87,18 @@ const FlaotingTextInput = ({ ...props }: FloatingTextInputProps) => {
 
 	return (
 		<Animated.View style={[styles.subContainer, viewStyles]}>
-			<Animated.Text style={[returnAnimatedTitleStyles]}>{label}</Animated.Text>
+			<Animated.Text style={[returnAnimatedTitleStyles, textStyle]}>
+				{label}
+			</Animated.Text>
 			<TextInput
-				onChangeText={onChangeText}
-				value={text}
-				style={styles.textStyle}
+				value={value}
+				style={[styles.textStyle, inputStyle]}
 				onBlur={onBlur}
 				onFocus={onFocus}
+				secureTextEntry={hidden}
+				onChangeText={(text) => {
+					handleTextChange(text);
+				}}
 			/>
 		</Animated.View>
 	);
@@ -95,14 +106,13 @@ const FlaotingTextInput = ({ ...props }: FloatingTextInputProps) => {
 
 const styles = StyleSheet.create({
 	subContainer: {
-        // ACCESS WIDTH FROM PROPS HERE?
-
 		marginHorizontal: 24,
 	},
 	textStyle: {
 		paddingBottom: 10,
 		fontSize: 16,
+		color: "white",
 	},
 });
 
-export default FlaotingTextInput;
+export default FloatingLabelInput;
