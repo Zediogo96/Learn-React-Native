@@ -24,6 +24,10 @@ const deviceSize = Dimensions.get("window");
 import backgroundImage from "@/../assets/background.jpg";
 import logo from "@/../assets/ciclist.jpg";
 
+// redux related
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "@/redux/slices/authSlice";
+
 interface LoginScreenProps {
 	navigation: any;
 }
@@ -31,6 +35,19 @@ interface LoginScreenProps {
 const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+
+	const { loading, user, error, success } = useSelector(
+		(state: any) => state.auth
+	);
+
+	console.log(loading, user, error, success);
+
+	const dispatch = useDispatch();
+
+	const handleLogin = () => {
+		// @ts-ignore
+		dispatch(loginUser({ email, password }));
+	};
 
 	const [loaded] = useFonts({
 		"Pacifico-Regular": require("@/../assets/fonts/Pacifico-Regular.ttf"),
@@ -95,6 +112,7 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
 
 					<Animated.View entering={BounceIn}>
 						<TouchableOpacity
+							onPress={handleLogin}
 							style={{
 								backgroundColor: "rgb(251,91,9)",
 								width: deviceSize.width * 0.35,

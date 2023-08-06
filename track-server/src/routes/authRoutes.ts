@@ -50,7 +50,7 @@ router.post("/login", async (req, res) => {
         if (!match) return res.status(422).send({ error: "Invalid password or email" });
         else {
             const token = jwt.sign({userID: user!._id}, process.env.JWT_SECRET_KEY!);
-            res.status(400).send({token, ...user!.toJSON()});
+            res.status(200).send({token, ...user!.toJSON()});
         }
     } catch (err : any) {
         res.status(422).send({ error: err.message });

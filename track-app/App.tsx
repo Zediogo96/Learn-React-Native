@@ -10,7 +10,7 @@ import TrackDetailScreen from "./src/screens/TrackDetailScreen";
 import TrackListScreen from "./src/screens/TrackListScreen";
 
 import { Provider } from "react-redux";
-import store from "./src/redux/store/counterStore";
+import store from "./src/redux/store/authStore";
 
 const _authenticatedFlow = createStackNavigator(
 	{

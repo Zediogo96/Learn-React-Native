@@ -19,18 +19,13 @@ import { useFonts } from "expo-font";
 import { Dimensions } from "react-native";
 import { Shadow } from "react-native-shadow-2";
 
-const deviceSize = Dimensions.get("window");
-
 import backgroundImage from "@/../assets/background.jpg";
 import logo from "@/../assets/ciclist.jpg";
 import { ScrollView } from "react-native-gesture-handler";
 
-import {
-	increment,
-	decrement,
-	incrementByAmount,
-	setCounter,
-} from "@/redux/slices/counterSlice";
+import { useDispatch, useSelector } from "react-redux";
+
+const deviceSize = Dimensions.get("window");
 
 interface RegisterScreenProps {
 	navigation: any;
@@ -45,7 +40,6 @@ const RegisterScreen: FC<RegisterScreenProps> = ({ navigation }) => {
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 
-	const handleRegister = () => {};
 
 	if (!loaded) return null;
 
@@ -71,7 +65,6 @@ const RegisterScreen: FC<RegisterScreenProps> = ({ navigation }) => {
 									style={{
 										width: deviceSize.width * 0.7,
 										height: deviceSize.width * 0.4,
-
 										marginBottom: 30,
 										borderRadius: 10,
 									}}
@@ -128,7 +121,7 @@ const RegisterScreen: FC<RegisterScreenProps> = ({ navigation }) => {
 
 							<Animated.View entering={BounceIn}>
 								<TouchableOpacity
-									onPress={() => dispatch(increment())}
+									// onPress={handleRegister}
 									style={styles.button}
 								>
 									<Text
@@ -152,7 +145,6 @@ const RegisterScreen: FC<RegisterScreenProps> = ({ navigation }) => {
 							>
 								<Text style={{ color: "white" }}>Already have an account?</Text>
 								<TouchableOpacity
-									// onPress={() => dispatch(decrement())}
 									onPress={() => navigation.navigate("Login")}
 									style={{ marginLeft: 5 }}
 								>
