@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@expo-google-fonts/dev": "^0.2.3",
+    "@react-native-async-storage/async-storage": "^1.19.1",
     "@react-native-community/masked-view": "^0.1.11",
     "@reduxjs/toolkit": "^1.9.5",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
@@ -52,5 +53,14 @@
     "eslint": "^8.46.0",
     "typescript": "^5.1.6"
   },
-  "private": true
+  "private": true,
+  "prettier": {
+    "trailingComma": "none",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true,
+    "jsxSingleQuote": true,
+    "printWidth": 240,
+    "arrowParens": "avoid"
+  }
 }
