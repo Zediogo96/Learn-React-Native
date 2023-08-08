@@ -16,8 +16,9 @@ import { setNavigator } from './src/hooks/useNavigationRef'
 
 const _authenticatedFlow = createStackNavigator(
     {
+
+        Login: LoginScreen,
         Register: RegisterScreen,
-        Login: LoginScreen
     },
     {
         headerMode: 'none'

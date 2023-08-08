@@ -1088,3 +1088,27 @@ const App = () => {
 
 export default App
 ```
+
+# Bonus Tip : Navigation Events
+
+```js
+import { NavigationEvents } from 'react-navigation'
+
+const NavigationEventsExample = () => {
+	return (
+		<View>
+			<NavigationEvents
+				// this function is called when the screen is about to be displayed
+				onWillFocus={() => {}}
+				// this function is called when the screen is displayed´
+				onDidFocus={() => {}}
+				// this function is called when the screen is about to be hidden
+				onWillBlur={() => {}}
+				// this function is called when the screen is hidden
+				onDidBlur={() => {}}
+			/>
+			{/* ... */}
+		</View>
+	)
+}
+```

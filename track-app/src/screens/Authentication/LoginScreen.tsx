@@ -1,6 +1,6 @@
 import FloatingLabelInput from '@/components/FloatingLabelInput'
 import React, { FC, useState, useEffect } from 'react'
-import { View, Image, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native'
+import { View, Image, Alert, StyleSheet, ImageBackground } from 'react-native'
 import Animated, { FlipInYLeft, FlipInYRight, FadeInRight, BounceIn } from 'react-native-reanimated'
 import { Text } from 'react-native-elements'
 
@@ -15,18 +15,22 @@ import logo from '@/../assets/ciclist.jpg'
 
 // redux related
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser } from '@/redux/slices/authSlice'
-import AuthButton from '../../components/AuthButton'
+import { loginUser, tryLocalSignin } from '@/redux/slices/authSlice'
+import AuthNavText from '../../components/Authentication/AuthNavText'
+import AuthButton from '../../components/Authentication/AuthButton'
 
 interface LoginScreenProps {
     navigation: any
 }
 
+// AsyncStorage.getItem('token').then((token) => console.log('Token:', token))
+// AsyncStorage.clear()
+
 const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const { loading, user, token, error, success } = useSelector((state: any) => state.auth)
+    const { loading, error, success } = useSelector((state: any) => state.auth)
 
     const dispatch = useDispatch()
 
@@ -35,12 +39,22 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
         dispatch(loginUser({ email, password }))
     }
 
+    // -- Manages changes to the redux auth provider state -- //
     useEffect(() => {
+
         if (success) {
-            alert('Login successful!')
+            Alert.alert('Login successful!')
             navigation.navigate('TrackList')
         } else if (error) alert(error)
+
     }, [success, error, loading])
+
+    // -- Performs a check to see if a user already has a session token stored in AsyncStorage -- //
+    useEffect(() => {
+        // @ts-ignore 
+        dispatch(tryLocalSignin())
+    }, [])
+
 
     const [loaded] = useFonts({
         'Pacifico-Regular': require('@/../assets/fonts/Pacifico-Regular.ttf')
@@ -55,21 +69,12 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
                     <Shadow distance={7} startColor={'rgba(0,0,0,0.7)'}>
                         <Image
                             source={logo}
-                            style={{
-                                width: deviceSize.width * 0.7,
-                                height: deviceSize.width * 0.4,
-                                marginBottom: 30,
-                                borderRadius: 10
-                            }}
+                            style={styles.imageStyle}
                         />
                     </Shadow>
                     <Animated.Text
                         entering={FadeInRight}
-                        style={{
-                            fontSize: 35,
-                            color: 'rgb(251,91,9)',
-                            fontFamily: 'Pacifico-Regular'
-                        }}
+                        style={styles.mainText}
                     >
                         LOGIN
                     </Animated.Text>
@@ -92,21 +97,9 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
                         </Animated.View>
                     </View>
 
-                    <Animated.View entering={BounceIn}>
-                        <TouchableOpacity onPress={handleLogin} style={styles.button}>
-                            <Text
-                                style={{
-                                    color: 'rgb(0,63,92)',
-                                    fontSize: 20,
-                                    fontWeight: 'bold'
-                                }}
-                            >
-                                Login
-                            </Text>
-                        </TouchableOpacity>
-                    </Animated.View>
+                    <AuthButton callback={handleLogin} text='LOGIN' style={styles.button} />
 
-                    <AuthButton navigationCallback={() => navigation.navigate('Register')} mainText="Don't have an account?" highlightText='Register.' />
+                    <AuthNavText navigationCallback={() => navigation.navigate('Register')} mainText="Don't have an account?" highlightText='Register.' />
                 </View>
             </Shadow>
         </ImageBackground>
@@ -141,6 +134,17 @@ const styles = StyleSheet.create({
         marginTop: 20,
         borderBottomWidth: 3,
         borderColor: 'rgb(0,63,92)'
+    },
+    imageStyle: {
+        width: deviceSize.width * 0.7,
+        height: deviceSize.width * 0.4,
+        marginBottom: 30,
+        borderRadius: 10
+    },
+    mainText: {
+        fontSize: 35,
+        color: 'rgb(251,91,9)',
+        fontFamily: 'Pacifico-Regular'
     }
 })
 
