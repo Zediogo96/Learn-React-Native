@@ -13,7 +13,7 @@ const deviceSize = Dimensions.get('window')
 import backgroundImage from '@/../assets/background.jpg'
 import logo from '@/../assets/ciclist.jpg'
 
-// redux related
+// Redux Related
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, tryLocalSignin } from '@/redux/slices/authSlice'
 import AuthNavText from '../../components/Authentication/AuthNavText'
@@ -23,8 +23,7 @@ interface LoginScreenProps {
     navigation: any
 }
 
-// AsyncStorage.getItem('token').then((token) => console.log('Token:', token))
-// AsyncStorage.clear()
+
 
 const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
     const [email, setEmail] = useState('')
@@ -48,13 +47,6 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
         } else if (error) alert(error)
 
     }, [success, error, loading])
-
-    // -- Performs a check to see if a user already has a session token stored in AsyncStorage -- //
-    useEffect(() => {
-        // @ts-ignore 
-        dispatch(tryLocalSignin())
-    }, [])
-
 
     const [loaded] = useFonts({
         'Pacifico-Regular': require('@/../assets/fonts/Pacifico-Regular.ttf')

@@ -5,10 +5,13 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 import AccountScreen from './src/screens/AccountScreen'
 import LoginScreen from './src/screens/Authentication/LoginScreen'
+import ResolveAuthScreen from './src/screens/Authentication/ResolveAuthScreen'
 import RegisterScreen from './src/screens/Authentication/RegisterScreen'
 import TrackCreateScreen from './src/screens/TrackCreateScreen'
 import TrackDetailScreen from './src/screens/TrackDetailScreen'
 import TrackListScreen from './src/screens/TrackListScreen'
+
+
 
 import { Provider as AuthProvider } from 'react-redux'
 import store from './src/redux/store/authStore'
@@ -16,7 +19,7 @@ import { setNavigator } from './src/hooks/useNavigationRef'
 
 const _authenticatedFlow = createStackNavigator(
     {
-
+        ResolveAuth: ResolveAuthScreen,
         Login: LoginScreen,
         Register: RegisterScreen,
     },
@@ -34,6 +37,7 @@ const _trackListFlow = createStackNavigator(
 )
 
 const switchNavigator = createSwitchNavigator({
+
     authenticatedFlow: _authenticatedFlow,
 
     mainFlow: createMaterialBottomTabNavigator({
